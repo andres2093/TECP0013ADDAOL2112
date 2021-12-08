@@ -91,3 +91,23 @@ select nombre, apellido_paterno from empleado as e;
 select nombre, apellido_paterno, (select salario from puesto where id_puesto = empleado.id_puesto) as salario from empleado;
 -- Cona alias
 select nombre, apellido_paterno, (select salario from puesto where id_puesto = e.id_puesto) as salario from empleado e;
+
+-- Reto 4
+-- ¿Cuál es el nombre de los empleados cuyo sueldo es menor a $10,000?
+SELECT nombre, apellido_paterno
+FROM empleado
+WHERE id_puesto IN
+ (SELECT id_puesto
+      FROM puesto
+      WHERE salario < 10000);
+
+-- ¿Cuál es la cantidad mínima y máxima de ventas de cada empleado?
+SELECT id_empleado, min(total_ventas), max(total_ventas)
+FROM
+ (SELECT clave, id_empleado, count(*) total_ventas
+      FROM venta
+      GROUP BY clave, id_empleado) AS sq
+GROUP BY id_empleado;
+
+-- ¿Cuál es el nombre del puesto de cada empleado?
+SELECT nombre, apellido_paterno, (SELECT nombre FROM puesto WHERE id_puesto = e.id_puesto) as puesto FROM empleado AS e;
