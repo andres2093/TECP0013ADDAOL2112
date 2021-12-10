@@ -77,3 +77,37 @@ select clave, round(sum(precio), 2) as total
 from tickets_071
 group by clave
 order by total desc;
+
+-- Reto 2
+-- Obtener el puesto de un empleado.
+CREATE VIEW puestos_071 AS
+SELECT concat(e.nombre, ' ', e.apellido_paterno), p.nombre
+FROM empleado e
+JOIN puesto p
+  ON e.id_puesto = p.id_puesto;
+  
+SELECT * FROM puestos_071;
+-- Saber qué artículos ha vendido cada empleado.
+CREATE VIEW empleado_articulo_071 AS
+SELECT v.clave, concat(e.nombre, ' ', e.apellido_paterno) as nombre, a.nombre as articulo
+FROM venta v
+JOIN empleado e
+  ON v.id_empleado = e.id_empleado
+JOIN articulo a
+  ON v.id_articulo = a.id_articulo
+ORDER BY v.clave;
+
+SELECT * FROM  empleado_articulo_071;
+-- Saber qué puesto ha tenido más ventas.
+CREATE VIEW puesto_ventas_071 AS
+SELECT p.nombre, count(v.clave) as total
+FROM venta v
+JOIN empleado e
+  ON v.id_empleado = e.id_empleado
+JOIN puesto p
+  ON e.id_puesto = p.id_puesto
+GROUP BY p.nombre;
+
+SELECT * FROM puesto_ventas_071
+ORDER BY total DESC
+LIMIT 5;
