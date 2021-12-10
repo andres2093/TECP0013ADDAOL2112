@@ -59,3 +59,21 @@ JOIN articulo a
 group by v.id_empleado
 order by total desc;
 
+-- Creación de vista
+create view tickets_071 as ( 
+	SELECT v.clave, v.fecha, a.nombre as producto, a.precio, 
+	concat(e.nombre, ' ', e.apellido_paterno, ' ', e.apellido_materno) as empleado 
+	FROM venta v
+	JOIN empleado e
+	  ON v.id_empleado = e.id_empleado
+	JOIN articulo a
+	  ON v.id_articulo = a.id_articulo
+);
+
+-- Consultar vista
+select * from tickets_071;
+
+select clave, round(sum(precio), 2) as total
+from tickets_071
+group by clave
+order by total desc;
